@@ -7,6 +7,8 @@ let mapleader = ","
 set hidden
 set visualbell t_vb=
 
+let g:gitgutter_sign_column_always = 4
+
 set hlsearch
 " make searches case-sensitive only if they contain upper-case characters
 set ignorecase smartcase
@@ -46,6 +48,10 @@ endfunction
 
 call Tabstyle_spaces()
 
+set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
+
+set nofoldenable " Say no to code folding...
+
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 
 " cd to directory of open file
@@ -71,12 +77,17 @@ autocmd BufNewFile,BufRead Thorfile set filetype=ruby
 " Find better function here:
 " http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
 " :imap <tab> <c-x><c-o>
+"
+
+" Remove trailing whitespace on save for ruby files.
+au BufWritePre *.rb :%s/\s\+$//e
 
 " let Vundle manage Vundle
 " required!
 Bundle 'gmarik/vundle'
 
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'nanotech/jellybeans.vim'
 
 " tpope stuff
 Bundle 'tpope/vim-sensible'
@@ -88,7 +99,7 @@ Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-ragtag'
 
-Bundle 'duskhacker/sweet-rspec-vim' 
+Bundle 'duskhacker/sweet-rspec-vim'
 
 " original repos on github
 Bundle 'kien/ctrlp.vim'
@@ -99,10 +110,11 @@ Bundle 'derekwyatt/vim-scala'
 
 Bundle 'Lokaltog/powerline'
 " Bundle 'bling/vim-airline'
+Bundle 'stephenmckinney/vim-solarized-powerline'
 Bundle 'mileszs/ack.vim'
 Bundle 'jiangmiao/auto-pairs'
 Bundle 'aaronbieber/quicktask.git'
-" Bundle 'airblade/vim-gitgutter'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'Shutnik/jshint2.vim.git'
 Bundle 'lunaru/vim-less'
 Bundle 'skammer/vim-css-color'
@@ -112,7 +124,18 @@ Bundle "tomtom/tlib_vim"
 Bundle "garbas/vim-snipmate"
 Bundle "pangloss/vim-javascript"
 Bundle "othree/javascript-libraries-syntax.vim"
-Bundle "juvenn/mustache.vim.git"
+Bundle "wakatime/vim-wakatime"
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'mustache/vim-mustache-handlebars'
+Bundle 'vim-scripts/dbext.vim'
+
+" PHP stuff
+Bundle 'tremby/synchk'
+Bundle 'xsbeats/vim-blade'
+
+let g:user_emmet_settings = {
+      \  'indentation' : ' '
+      \}
 
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_css_checkers = ['lessc']
@@ -125,17 +148,23 @@ let g:syntastic_html_tidy_ignore_errors=[
       \'escaping malformed URI reference',
       \'lacks "alt" attribute',
       \'lacks "src" attribute',
-			\'trimming empty',
-			\]
+      \'trimming empty',
+      \]
 
 let g:used_javascript_libs = 'angularjs,jquery,underscore'
+
 autocmd BufReadPre *.js let b:javascript_lib_use_angularjs = 1
 autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 1
 autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 1
 " autocmd BufReadPre *.js let b:javascript_lib_use_backbone = 1
 " autocmd BufReadPre *.js let b:javascript_lib_use_prelude = 0
 
+set guifont=Sauce\ Code\ Powerline:h12
+" set guifont=Monaco:h14
+
 let g:airline_powerline_fonts = 1
+let g:Powerline_theme='short'
+let g:Powerline_colorscheme='solarized256_dark'
 
 " preview in browser
 " Bundle 'Bogdanp/browser-connect.vim.git'
@@ -164,8 +193,15 @@ set backup
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
+let g:solarized_termcolors=256
 " colorscheme solarized
-colorscheme molokai
+colorscheme molokai-jamey
+" colorscheme Tomorrow-Night
+" colorscheme jellybeans
+
+let g:solarized_termcolors= 16 | 256
+let g:solarized_bold=0
+
 set background=dark
 " let g:molokai_original = 1
 " let g:rehash256 = 1
@@ -205,7 +241,7 @@ set wildignore+=*/htdocs/*
 :noremap <Leader>r :NERDTreeToggle<CR>
 let NERDTreeHiJackNetrw = 1
 let NERDTreeMouseMode=1
-let NERDTreeWinSize=30
+let NERDTreeWinSize=40
 
 " sweet-rspec-vim settings
 map <D-r> :SweetVimRspecRunFile<CR>
