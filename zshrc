@@ -86,5 +86,11 @@ alias -g s3='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
 
 alias -g focus1='sbagen /Applications/sbagen-1.4.5/examples/focus/ts1-concentration.sbg'
 
+# functions, they are like alias's but slightly more flexible and slightly less readible
+dir(){
+  for d in ./*/ ; do (cd "$d" && echo "$d" && $*); done;
+}
+# usage: cd ~; dir ls;
+# bonus usage (dir can call itself): cd ~; dir dir ls -a;
 # Customize to your needs...
 export PATH=$PATH:/Users/jdavis/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jdavis/cl/bin
