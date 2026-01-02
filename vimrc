@@ -71,7 +71,10 @@ Plug 'morhetz/gruvbox'
 call plug#end()
 filetype plugin indent on
 
-colorscheme jellybeans
+" Gruvbox theme configuration
+let g:gruvbox_contrast_dark = 'medium'
+let g:gruvbox_italic = 1
+colorscheme gruvbox
 
 " Nerdtree
 :noremap <Leader>r :NERDTreeToggle<CR>
@@ -86,7 +89,8 @@ nnoremap <Leader>g :Rg<CR>
 
 " Airline
 let g:airline_powerline_fonts = 1
-let g:airline_theme='jellybeans'
+let g:airline_theme='gruvbox'
+let g:airline#extensions#tabline#enabled = 1
 
 " GitGutter
 let g:gitgutter_sign_column_always = 1
