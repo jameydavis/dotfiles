@@ -1,96 +1,160 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+# Path to oh-my-zsh installation
+export ZSH="$HOME/.oh-my-zsh"
 
-# use vim keybindings
-bindkey -v
-
-# set vim as fav editor
-export EDITOR=vim
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-# ZSH_THEME="agnoster"
+# Theme
 ZSH_THEME="robbyrussell"
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# oh-my-zsh configuration
+DISABLE_AUTO_UPDATE="false"
+UPDATE_ZSH_DAYS=13
+COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
-
-# Comment this out to disable bi-weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment to change how often before auto-updates occur? (in days)
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment following line if you want to disable command autocorrection
-# DISABLE_CORRECTION="true"
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment following line if you want to disable marking untracked files under
-# VCS as dirty. This makes repository status check for large repositories much,
-# much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew colorize)
+# Plugins
+plugins=(
+  git
+  brew
+  colorize
+  docker
+  npm
+  python
+  rails
+  ruby
+  node
+  macos
+)
 
 source $ZSH/oh-my-zsh.sh
-unsetopt correct
 
-# My aliases
+# ============================================================================
+# Environment Variables
+# ============================================================================
+
+export EDITOR=vim
+export VISUAL=vim
+
+# Path
+export PATH="$HOME/bin:/usr/local/bin:$PATH"
+
+# Use vim keybindings
+bindkey -v
+
+# Reduce ESC delay in vi mode
+export KEYTIMEOUT=1
+
+# Disable autocorrect
+unsetopt correct
+unsetopt correct_all
+
+# ============================================================================
+# Aliases
+# ============================================================================
+
+# Navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# List files
+alias ll="ls -alh"
+alias la="ls -A"
+alias l="ls -CF"
+
+# Git aliases (supplementing oh-my-zsh git plugin)
+alias gs="git status"
+alias gp="git push"
+alias gpl="git pull"
+alias gc="git commit"
+alias gca="git commit -a"
+alias gcm="git commit -m"
+alias gd="git diff"
+alias gco="git checkout"
+alias gb="git branch"
+alias glog="git log --oneline --decorate --graph"
+
+# Modern tools (if installed)
+if command -v bat &> /dev/null; then
+  alias cat="bat"
+fi
+
+if command -v exa &> /dev/null; then
+  alias ls="exa"
+  alias ll="exa -alh"
+  alias tree="exa --tree"
+fi
+
+# Safety nets
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"
+
+# Nocorrect for specific commands
 alias ssh="nocorrect ssh"
 alias gem="nocorrect gem"
-alias rvm="nocorrect rvm"
-alias lein="nocorrect lein"
-alias scala="nocorrect scala"
-alias rake="nocorrect rake"
 alias npm="nocorrect npm"
+alias rake="nocorrect rake"
 
-alias sr="sbt run"
-
-alias ll="ls -alh"
-
-# Banno aliases
-alias grip="cd ~/Banno/grip-admin"
-
-#Global Aliases
+# Global aliases (work anywhere in command line)
 alias -g G='| grep'
 alias -g L='| less'
-alias -g T='tail -fn 100'
-alias bgrep="bub logs grep"
-alias buser="bub api user"
+alias -g H='| head'
+alias -g T='| tail'
+alias -g J='| jq'
 
-alias -g bh='brew home'
-alias -g bs='brew search'
+# Brew shortcuts
+alias bup="brew update && brew upgrade"
+alias bcl="brew cleanup"
 
-alias -g srd='screen -rd'
+# Docker shortcuts
+alias dps="docker ps"
+alias dpa="docker ps -a"
+alias di="docker images"
 
-alias -g v='mvim'
+# ============================================================================
+# Functions
+# ============================================================================
 
-alias -g s3='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
+# Create directory and cd into it
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
 
-alias -g focus1='sbagen /Applications/sbagen-1.4.5/examples/focus/ts1-concentration.sbg'
-
-# functions, they are like alias's but slightly more flexible and slightly less readible
-dir(){
+# Execute command in all subdirectories
+dir() {
   for d in ./*/ ; do (cd "$d" && echo "$d" && $*); done;
 }
-# usage: cd ~; dir ls;
-# bonus usage (dir can call itself): cd ~; dir dir ls -a;
-# Customize to your needs...
-export PATH=$PATH:/Users/jdavis/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jdavis/cl/bin
+
+# Quick find
+f() {
+  find . -name "*$1*"
+}
+
+# Extract archives
+extract() {
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1     ;;
+      *.tar.gz)    tar xzf $1     ;;
+      *.bz2)       bunzip2 $1     ;;
+      *.rar)       unrar e $1     ;;
+      *.gz)        gunzip $1      ;;
+      *.tar)       tar xf $1      ;;
+      *.tbz2)      tar xjf $1     ;;
+      *.tgz)       tar xzf $1     ;;
+      *.zip)       unzip $1       ;;
+      *.Z)         uncompress $1  ;;
+      *.7z)        7z x $1        ;;
+      *)           echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+# ============================================================================
+# Load local customizations
+# ============================================================================
+
+if [ -f ~/.zshrc.local ]; then
+  source ~/.zshrc.local
+fi

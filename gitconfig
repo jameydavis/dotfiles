@@ -1,0 +1,129 @@
+[user]
+	name = Jamey Davis
+	email = jameydavis@users.noreply.github.com
+
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	whitespace = trailing-space,space-before-tab
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = red
+
+[alias]
+	# Short status
+	s = status -s
+	st = status
+
+	# Checkout
+	co = checkout
+	cob = checkout -b
+
+	# Commit
+	c = commit
+	cm = commit -m
+	ca = commit -a
+	cam = commit -am
+	amend = commit --amend
+	amendf = commit --amend --no-edit
+
+	# Branch
+	b = branch
+	ba = branch -a
+	bd = branch -d
+	bD = branch -D
+
+	# Log
+	l = log --oneline --decorate --graph
+	la = log --oneline --decorate --graph --all
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	last = log -1 HEAD --stat
+
+	# Diff
+	d = diff
+	ds = diff --staged
+	dc = diff --cached
+
+	# Pull/Push
+	p = push
+	pl = pull
+	pf = push --force-with-lease
+
+	# Stash
+	sl = stash list
+	sp = stash pop
+	ss = stash save
+
+	# Remote
+	r = remote
+	rv = remote -v
+
+	# Reset
+	unstage = reset HEAD --
+	undo = reset --soft HEAD^
+	
+	# Other useful commands
+	contributors = shortlog --summary --numbered
+	aliases = config --get-regexp alias
+	branches = branch -a
+	tags = tag -l
+	remotes = remote -v
+	
+	# Find commits by message
+	fm = "!git log --all --oneline --grep"
+	
+	# Find files
+	f = "!git ls-files | grep -i"
+	
+	# List ignored files
+	ignored = ls-files -o -i --exclude-standard
+
+[diff]
+	tool = vimdiff
+	algorithm = histogram
+
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+
+[rerere]
+	enabled = true
+
+[help]
+	autocorrect = 1
+
+[fetch]
+	prune = true
+
+[credential]
+	helper = osxkeychain
